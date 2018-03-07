@@ -13,6 +13,7 @@ import sublime
 import sublime_plugin
 import functools
 import re
+from Context import context
 
 try:
     # Python 2
@@ -197,8 +198,10 @@ class Parinfer(sublime_plugin.EventListener):
 
     # fires when a file is finished loading
     def on_load(self, view):
+        # depends on https://github.com/shagabutdinov/sublime-context
+        in_sidebar = {"key": "control", "operand": "sidebar_tree"}
         # workaround https://forum.sublimetext.com/t/on-load-induced-by-preview-in-goto-anything/6931/7
-        if view.window() != None:
+        if view.window() != None or context.check(view, [in_sidebar]):
             view.run_command('parinfer_refresh')
 
 
